@@ -1,5 +1,5 @@
 {
-  "name": "example-server",
+  "name": "ladyshaitan-server",
   "version": "1.0.0",
   "description": "This is an example of a basic HTTP API server.",
   "main": "index.js",
