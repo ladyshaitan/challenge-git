@@ -21,7 +21,7 @@ tape('healthcheck', function (t) {
 tape('not found', function (t) {
   var url = '/404'
   servertest(server(), url, {encoding: 'json'}, function (err, res) {
-    t.ifError(err, 'no error')
+    t.ifError(err)
 
     t.equal(res.statusCode, 404, 'correct statusCode')
     t.equal(res.body.error, 'Resource Not Found', 'error match')
@@ -32,7 +32,7 @@ tape('not found', function (t) {
 tape('should get value', function (t) {
   var val = {some: 'test object'}
   Things.put('test-key', val, function (err) {
-    t.ifError(err, 'no error')
+    t.ifError(err)
     var url = '/things/get/test-key'
     servertest(server(), url, {encoding: 'json'}, function (err, res) {
       t.ifError(err, 'no error')
@@ -53,7 +53,7 @@ tape('should put values', function (t) {
     .end(JSON.stringify(val))
 
   function onResponse (err, res) {
-    t.ifError(err, 'no error')
+    t.ifError(err)
     t.equal(res.statusCode, 200, 'correct statusCode')
 
     Things.get('test-key2', function (err, doc) {
@@ -91,15 +91,18 @@ tape('should get reverse', function (t) {
   }
 
   var url = '/reverse/' + expected.input
-  t.deepEqual(res.body, expected, 'values should match')
-  t.end()
+
+  servertest(server(), url, {encoding: 'json'}, (err, res) => {
+    t.ifError(err)
+    t.deepEqual(res.body, expected, 'values should match')
+    t.end()
+  })
 })
 
 tape('should get echo', function (t) {
   var url = '/echo?one=1&two=2'
   servertest(server(), url, {encoding: 'json'}, function (err, res) {
-    t.ifError(err, 'no error')
-
+    t.ifError(err)
     t.equal(res.statusCode, 200, 'correct statusCode')
     t.deepEqual(res.body, {one: '1', two: '2'}, 'values should match')
     t.end()
